@@ -94,6 +94,7 @@ const {
         const src = card.dataset.fullVideo;
         if (!full.src && src) full.src = src;
         card.dataset.playing = 'true';
+        card.querySelector<HTMLElement>('[data-loading-spinner]')?.classList.add('opacity-100');
         full.play().catch(() => {});
         activeCard = card;
       };
@@ -101,9 +102,20 @@ const {
       document.querySelectorAll<HTMLElement>('[data-full-video]').forEach((card) => {
         const full = card.querySelector<HTMLVideoElement>('[data-full-video-el]');
         const pauseIcon = card.querySelector<HTMLElement>('[data-pause-icon]');
+        const spinner = card.querySelector<HTMLElement>('[data-loading-spinner]');
 
-        full?.addEventListener('play', () => pauseIcon?.classList.remove('opacity-100'));
-        full?.addEventListener('pause', () => pauseIcon?.classList.add('opacity-100'));
+        full?.addEventListener('waiting', () => {
+          spinner?.classList.add('opacity-100');
+          pauseIcon?.classList.remove('opacity-100');
+        });
+        full?.addEventListener('playing', () => {
+          spinner?.classList.remove('opacity-100');
+          pauseIcon?.classList.remove('opacity-100');
+        });
+        full?.addEventListener('pause', () => {
+          spinner?.classList.remove('opacity-100');
+          pauseIcon?.classList.add('opacity-100');
+        });
 
         card.addEventListener('click', (e) => {
           const target = e.target as HTMLElement;

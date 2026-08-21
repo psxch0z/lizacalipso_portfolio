@@ -64,6 +64,14 @@ body {
   text-wrap: balance;
 }
 
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* mood accents */
 .mood-warm {
   --mood: var(--color-warm);

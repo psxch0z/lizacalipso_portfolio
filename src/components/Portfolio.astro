@@ -43,10 +43,20 @@ const filters = [
         ))}
       </div>
     </div>
+  </div>
 
-    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-case-grid data-reveal-group>
+  <div class="relative">
+    <div
+      class="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 md:mx-auto md:max-w-6xl"
+      data-case-grid
+      data-reveal-group
+    >
       {commercial.map((c, i) => (
-        <div data-case-item data-mood={c.data.mood}>
+        <div
+          class="w-[78vw] shrink-0 snap-start sm:w-[46vw] md:w-[calc((100%-2.5rem)/2)] lg:w-[calc((100%-5rem)/3)]"
+          data-case-item
+          data-mood={c.data.mood}
+        >
           <CaseCard
             title={c.data.title}
             project={c.data.project}
@@ -61,11 +71,31 @@ const filters = [
         </div>
       ))}
     </div>
+
+    <div class="mx-auto mt-6 flex max-w-6xl justify-end gap-3 px-6">
+      <button
+        type="button"
+        data-carousel-prev
+        aria-label="Previous"
+        class="flex h-10 w-10 items-center justify-center rounded-full border border-paper/15 text-paper/60 transition-colors hover:border-brand hover:text-brand"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 2 4 8l6 6"/></svg>
+      </button>
+      <button
+        type="button"
+        data-carousel-next
+        aria-label="Next"
+        class="flex h-10 w-10 items-center justify-center rounded-full border border-paper/15 text-paper/60 transition-colors hover:border-brand hover:text-brand"
+      >
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2l6 6-6 6"/></svg>
+      </button>
+    </div>
   </div>
 </section>
 
 <script>
   const group = document.querySelector('[data-filter-group]');
+  const track = document.querySelector<HTMLElement>('[data-case-grid]');
   const items = document.querySelectorAll<HTMLElement>('[data-case-item]');
 
   group?.addEventListener('click', (e) => {
@@ -80,5 +110,16 @@ const filters = [
       const show = key === 'all' || item.dataset.mood === key;
       item.style.display = show ? '' : 'none';
     });
+    track?.scrollTo({ left: 0 });
   });
+
+  const scrollByCard = (dir: number) => {
+    if (!track) return;
+    const card = track.querySelector<HTMLElement>('[data-case-item]:not([style*="display: none"])');
+    const width = card ? card.getBoundingClientRect().width + 20 : 320;
+    track.scrollBy({ left: dir * width });
+  };
+
+  document.querySelector('[data-carousel-prev]')?.addEventListener('click', () => scrollByCard(-1));
+  document.querySelector('[data-carousel-next]')?.addEventListener('click', () => scrollByCard(1));
 </script>
