@@ -14,24 +14,32 @@ const links = [
 >
   <a href="#" class="font-display text-sm uppercase tracking-[0.3em] text-paper">LC</a>
 
-  <nav class="hidden gap-8 md:flex">
-    {links.map((l) => (
-      <a
-        href={l.href}
-        class="text-xs uppercase tracking-[0.25em] text-paper/60 transition-colors duration-300 hover:text-warm"
-      >
-        {l.label}
-      </a>
-    ))}
-  </nav>
-
-  <a
-    href="#contact"
-    class="text-xs uppercase tracking-[0.25em] text-warm transition-opacity hover:opacity-70 md:hidden"
+  <button
+    type="button"
+    data-menu-toggle
+    aria-label="Menu"
+    aria-expanded="false"
+    class="relative z-10 flex h-9 w-9 flex-col items-center justify-center gap-[5px]"
   >
-    Contact
-  </a>
+    <span class="h-px w-6 bg-paper transition-all duration-300" data-bar-top></span>
+    <span class="h-px w-6 bg-paper transition-all duration-300" data-bar-bottom></span>
+  </button>
 </header>
+
+<div
+  data-mobile-menu
+  class="fixed inset-0 z-40 flex translate-y-[-100%] flex-col items-center justify-center gap-8 bg-ink opacity-0 transition-all duration-500"
+>
+  {links.map((l) => (
+    <a
+      href={l.href}
+      data-menu-link
+      class="font-display text-3xl text-paper transition-colors duration-300 hover:text-brand"
+    >
+      {l.label}
+    </a>
+  ))}
+</div>
 
 <script>
   const nav = document.querySelector<HTMLElement>('[data-nav]');
@@ -45,4 +53,32 @@ const links = [
   };
   document.addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+
+  const toggle = document.querySelector<HTMLElement>('[data-menu-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-mobile-menu]');
+  const barTop = document.querySelector<HTMLElement>('[data-bar-top]');
+  const barBottom = document.querySelector<HTMLElement>('[data-bar-bottom]');
+
+  let open = false;
+
+  const setOpen = (next: boolean) => {
+    open = next;
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    menu.classList.toggle('translate-y-[-100%]', !open);
+    menu.classList.toggle('opacity-0', !open);
+    document.body.style.overflow = open ? 'hidden' : '';
+    barTop?.classList.toggle('rotate-45', open);
+    barTop?.classList.toggle('translate-y-[3px]', open);
+    barBottom?.classList.toggle('-rotate-45', open);
+    barBottom?.classList.toggle('-translate-y-[3px]', open);
+  };
+
+  toggle?.addEventListener('click', () => setOpen(!open));
+  menu?.querySelectorAll('[data-menu-link]').forEach((link) => {
+    link.addEventListener('click', () => setOpen(false));
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && open) setOpen(false);
+  });
 </script>

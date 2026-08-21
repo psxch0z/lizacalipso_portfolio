@@ -6,12 +6,12 @@ const { eyebrow } = Astro.props;
 ---
 
 <section class="relative flex min-h-[70svh] w-full items-center justify-center overflow-hidden bg-ink px-6 py-28">
-  <div class="pointer-events-none absolute inset-0" style="background: linear-gradient(180deg, transparent, rgba(217,163,91,0.06), transparent);"></div>
+  <div class="pointer-events-none absolute inset-0" style="background: linear-gradient(180deg, transparent, rgba(255,47,143,0.06), transparent);"></div>
   <div class="relative z-10 mx-auto max-w-4xl text-center" data-reveal>
     {eyebrow && (
-      <p class="mb-8 text-xs font-medium uppercase tracking-[0.4em] text-warm/80">{eyebrow}</p>
+      <p class="mb-8 text-xs font-medium uppercase tracking-[0.4em] text-brand/80">{eyebrow}</p>
     )}
-    <p class="text-balance font-display text-[clamp(1.6rem,4.2vw,3rem)] italic leading-snug text-paper/90">
+    <p class="text-balance font-script text-[clamp(2rem,5.5vw,3.75rem)] leading-snug text-paper/90">
       <slot />
     </p>
   </div>

@@ -6,13 +6,14 @@ const links = [
 ---
 
 <section id="contact" class="relative w-full overflow-hidden bg-ink px-6 py-32 md:py-44 grain">
-  <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(70% 60% at 50% 100%, rgba(217,163,91,0.14), transparent 60%);"></div>
+  <div class="pointer-events-none absolute inset-0" style="background: radial-gradient(70% 60% at 50% 100%, rgba(255,47,143,0.14), transparent 60%);"></div>
 
   <div class="relative z-10 mx-auto flex max-w-4xl flex-col items-center text-center" data-reveal>
-    <p class="mb-6 text-xs font-medium uppercase tracking-[0.4em] text-warm/80">Contact</p>
-    <h2 class="font-display text-[clamp(2.4rem,6vw,4.5rem)] font-medium leading-[1.05] text-paper text-balance">
-      Let's create something<br /><span class="italic text-warm">beautiful</span>
+    <p class="mb-6 text-xs font-medium uppercase tracking-[0.4em] text-brand/80">Contact</p>
+    <h2 class="font-display text-[clamp(2.2rem,6vw,4rem)] leading-[1.05] text-paper text-balance">
+      Let's create something
     </h2>
+    <p class="mt-2 font-script text-[clamp(2.6rem,7vw,5rem)] text-brand">beautiful</p>
 
     <div class="mt-14 flex flex-wrap items-center justify-center gap-4">
       {links.map((l) => (
@@ -20,9 +21,9 @@ const links = [
           href={l.href}
           target="_blank"
           rel="noopener noreferrer"
-          class="group relative flex items-center gap-2.5 overflow-hidden rounded-full border border-paper/20 px-8 py-3 text-sm uppercase tracking-[0.2em] text-paper/80 transition-colors duration-300 hover:border-warm hover:text-ink"
+          class="group relative flex items-center gap-2.5 overflow-hidden rounded-full border border-paper/20 px-8 py-3 text-sm uppercase tracking-[0.2em] text-paper/80 transition-colors duration-300 hover:border-brand hover:text-ink"
         >
-          <span class="absolute inset-0 -translate-x-full bg-warm transition-transform duration-300 ease-out group-hover:translate-x-0"></span>
+          <span class="absolute inset-0 -translate-x-full bg-brand transition-transform duration-300 ease-out group-hover:translate-x-0"></span>
           <svg class="relative h-4 w-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
             {l.icon === 'instagram' ? (
               <>

@@ -1,11 +1,16 @@
 @import 'tailwindcss';
 
 @theme {
-  --font-display: 'Fraunces', ui-serif, Georgia, serif;
+  --font-display: 'Anton', ui-sans-serif, system-ui, sans-serif;
+  --font-script: 'Marck Script', cursive;
   --font-body: 'Inter', ui-sans-serif, system-ui, sans-serif;
 
-  --color-ink: #0b0a08;
-  --color-paper: #f3ede4;
+  --color-ink: #060606;
+  --color-paper: #f7f7f5;
+  --color-brand: #ff2f8f;
+  --color-brand-dim: #8a1050;
+
+  /* case-mood accents (portfolio cards only, independent of site brand color) */
   --color-warm: #d9a35b;
   --color-warm-dim: #7a5a35;
   --color-bw: #c9c9c9;
@@ -26,10 +31,16 @@ body {
 
 .font-display {
   font-family: var(--font-display);
+  letter-spacing: 0.01em;
+}
+
+.font-script {
+  font-family: var(--font-script);
+  font-weight: 400;
 }
 
 ::selection {
-  background: var(--color-warm);
+  background: var(--color-brand);
   color: var(--color-ink);
 }
 
