@@ -47,7 +47,7 @@ const filters = [
 
   <div class="relative">
     <div
-      class="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 md:mx-auto md:max-w-6xl"
+      class="scrollbar-hide -mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-4 cursor-grab active:cursor-grabbing md:mx-auto md:max-w-6xl"
       data-case-grid
       data-reveal-group
     >
@@ -122,4 +122,63 @@ const filters = [
 
   document.querySelector('[data-carousel-prev]')?.addEventListener('click', () => scrollByCard(-1));
   document.querySelector('[data-carousel-next]')?.addEventListener('click', () => scrollByCard(1));
+
+  // let a vertical mouse-wheel scroll the horizontal track
+  track?.addEventListener(
+    'wheel',
+    (e) => {
+      if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return;
+      e.preventDefault();
+      track.scrollLeft += e.deltaY;
+    },
+    { passive: false }
+  );
+
+  // click-and-drag with the mouse
+  let isDragging = false;
+  let dragMoved = false;
+  let dragStartX = 0;
+  let scrollStart = 0;
+
+  track?.addEventListener('dragstart', (e) => e.preventDefault());
+
+  track?.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    dragMoved = false;
+    dragStartX = e.pageX;
+    scrollStart = track.scrollLeft;
+  });
+
+  window.addEventListener('mousemove', (e) => {
+    if (!isDragging || !track) return;
+    const dx = e.pageX - dragStartX;
+    if (Math.abs(dx) > 6 && !dragMoved) {
+      dragMoved = true;
+      // CSS scroll-snap fights direct scrollLeft writes mid-gesture; drop it
+      // while actively dragging and let it re-engage once the mouse is released.
+      track.classList.remove('snap-x', 'snap-mandatory');
+    }
+    if (dragMoved) {
+      e.preventDefault();
+      track.scrollLeft = scrollStart - dx;
+    }
+  });
+
+  window.addEventListener('mouseup', () => {
+    isDragging = false;
+    if (dragMoved) track?.classList.add('snap-x', 'snap-mandatory');
+  });
+
+  // dragging shouldn't also trigger a card's open-video click
+  track?.addEventListener(
+    'click',
+    (e) => {
+      if (dragMoved) {
+        e.stopPropagation();
+        e.preventDefault();
+      }
+      dragMoved = false;
+    },
+    { capture: true }
+  );
 </script>
