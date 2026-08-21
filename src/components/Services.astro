@@ -1,0 +1,59 @@
+---
+const services = [
+  {
+    title: 'Social media content',
+    text: 'Создание контента для социальных сетей брендов и проектов.',
+  },
+  {
+    title: 'Reels production',
+    text: 'Разработка идеи, съёмка и монтаж вертикальных видео.',
+  },
+  {
+    title: 'Event videos',
+    text: 'Видео, передающие атмосферу мероприятий.',
+  },
+];
+
+const approach = [
+  {
+    title: 'Concept',
+    text: 'Идея — основа каждого ролика. Я ищу формат, который подходит именно проекту и его аудитории.',
+  },
+  {
+    title: 'Story',
+    text: 'Мне важно показывать не только то, что происходит, но и то, что человек должен почувствовать.',
+  },
+  {
+    title: 'Editing',
+    text: 'Монтаж под формат социальных сетей: динамика, ритм и удержание внимания.',
+  },
+];
+---
+
+<section id="services" class="relative w-full bg-ink px-6 py-28 md:py-36">
+  <div class="mx-auto max-w-6xl">
+    <p class="mb-16 text-xs font-medium uppercase tracking-[0.4em] text-warm/80" data-reveal>What I do</p>
+
+    <div class="grid gap-px overflow-hidden rounded-sm border border-paper/10 bg-paper/10 sm:grid-cols-3" data-reveal-group>
+      {services.map((s, i) => (
+        <div class="group bg-ink px-8 py-12 transition-colors duration-500 hover:bg-paper/[0.03]" data-reveal style={`--reveal-index:${i}`}>
+          <span class="font-display text-sm text-warm/60">0{i + 1}</span>
+          <h3 class="mt-4 font-display text-2xl text-paper">{s.title}</h3>
+          <p class="mt-4 text-paper/60 leading-relaxed">{s.text}</p>
+        </div>
+      ))}
+    </div>
+
+    <p class="mb-16 mt-32 text-xs font-medium uppercase tracking-[0.4em] text-warm/80" data-reveal>My approach</p>
+
+    <div class="grid gap-12 sm:grid-cols-3" data-reveal-group>
+      {approach.map((a, i) => (
+        <div data-reveal style={`--reveal-index:${i}`}>
+          <div class="mb-6 h-px w-12 bg-warm/60"></div>
+          <h3 class="font-display text-xl text-paper">{a.title}</h3>
+          <p class="mt-4 text-paper/60 leading-relaxed">{a.text}</p>
+        </div>
+      ))}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,48 @@
+---
+const links = [
+  { label: 'About', href: '#about' },
+  { label: 'Work', href: '#work' },
+  { label: 'Personal', href: '#personal' },
+  { label: 'Contact', href: '#contact' },
+];
+---
+
+<header
+  id="site-nav"
+  class="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-5 transition-colors duration-500 md:px-10"
+  data-nav
+>
+  <a href="#" class="font-display text-sm uppercase tracking-[0.3em] text-paper">LC</a>
+
+  <nav class="hidden gap-8 md:flex">
+    {links.map((l) => (
+      <a
+        href={l.href}
+        class="text-xs uppercase tracking-[0.25em] text-paper/60 transition-colors duration-300 hover:text-warm"
+      >
+        {l.label}
+      </a>
+    ))}
+  </nav>
+
+  <a
+    href="#contact"
+    class="text-xs uppercase tracking-[0.25em] text-warm transition-opacity hover:opacity-70 md:hidden"
+  >
+    Contact
+  </a>
+</header>
+
+<script>
+  const nav = document.querySelector<HTMLElement>('[data-nav]');
+  const onScroll = () => {
+    if (!nav) return;
+    if (window.scrollY > 40) {
+      nav.classList.add('bg-ink/80', 'backdrop-blur-md', 'border-b', 'border-paper/10');
+    } else {
+      nav.classList.remove('bg-ink/80', 'backdrop-blur-md', 'border-b', 'border-paper/10');
+    }
+  };
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+</script>

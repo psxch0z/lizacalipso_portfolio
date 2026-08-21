@@ -1,0 +1,81 @@
+---
+import { getCollection } from 'astro:content';
+import CaseCard from './CaseCard.astro';
+
+const allCases = await getCollection('cases');
+const commercial = allCases
+  .filter((c) => c.data.group === 'commercial')
+  .sort((a, b) => a.data.order - b.data.order);
+
+const filters = [
+  { key: 'all', label: 'All' },
+  { key: 'warm', label: 'Cinematic' },
+  { key: 'bw', label: 'Documentary' },
+  { key: 'promo', label: 'Promo' },
+];
+---
+
+<section id="work" class="relative w-full bg-ink px-6 py-28 md:py-36">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-16 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <div data-reveal>
+        <p class="mb-6 text-xs font-medium uppercase tracking-[0.4em] text-warm/80">Commercial projects</p>
+        <h2 class="font-display text-[clamp(2rem,4vw,3rem)] font-medium text-paper text-balance">
+          Постоянное сотрудничество с <span class="italic text-warm">TU SALSA</span>
+        </h2>
+        <p class="mt-4 max-w-lg text-paper/60">
+          Студия латиноамериканских социальных танцев — атмосферные видео, контент с
+          мероприятий, разговорные форматы, видео-приглашения, вовлекающие ролики.
+        </p>
+      </div>
+
+      <div class="flex flex-wrap gap-2" data-filter-group>
+        {filters.map((f) => (
+          <button
+            type="button"
+            data-filter={f.key}
+            class="rounded-full border border-paper/15 px-4 py-2 text-xs uppercase tracking-[0.2em] text-paper/60 transition-colors duration-300 hover:border-warm/50 hover:text-paper data-[active=true]:border-warm data-[active=true]:text-warm"
+            data-active={f.key === 'all' ? 'true' : 'false'}
+          >
+            {f.label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3" data-case-grid data-reveal-group>
+      {commercial.map((c, i) => (
+        <div data-case-item data-mood={c.data.mood}>
+          <CaseCard
+            title={c.data.title}
+            project={c.data.project}
+            format={c.data.format}
+            task={c.data.task}
+            role={c.data.role}
+            mood={c.data.mood}
+            index={i}
+          />
+        </div>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  const group = document.querySelector('[data-filter-group]');
+  const items = document.querySelectorAll<HTMLElement>('[data-case-item]');
+
+  group?.addEventListener('click', (e) => {
+    const btn = (e.target as HTMLElement).closest<HTMLElement>('[data-filter]');
+    if (!btn) return;
+    const key = btn.dataset.filter;
+
+    group.querySelectorAll('[data-filter]').forEach((b) => b.setAttribute('data-active', 'false'));
+    btn.setAttribute('data-active', 'true');
+
+    items.forEach((item) => {
+      const show = key === 'all' || item.dataset.mood === key;
+      item.style.display = show ? '' : 'none';
+    });
+  });
+</script>

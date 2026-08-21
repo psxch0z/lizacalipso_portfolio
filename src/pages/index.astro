@@ -1,17 +1,26 @@
 ---
-
+import Layout from '../layouts/Layout.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import About from '../components/About.astro';
+import BigQuote from '../components/BigQuote.astro';
+import Services from '../components/Services.astro';
+import Portfolio from '../components/Portfolio.astro';
+import PersonalProjects from '../components/PersonalProjects.astro';
+import Contacts from '../components/Contacts.astro';
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<Layout>
+  <Nav />
+  <main>
+    <Hero />
+    <About />
+    <BigQuote eyebrow="Кто я">
+      Люди запоминают не просто кадры — а те видео, которые заставили их что-то почувствовать.
+    </BigQuote>
+    <Services />
+    <Portfolio />
+    <PersonalProjects />
+    <Contacts />
+  </main>
+</Layout>

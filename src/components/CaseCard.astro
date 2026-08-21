@@ -1,0 +1,56 @@
+---
+interface Props {
+  title: string;
+  project: string;
+  format: string;
+  task: string;
+  role: string;
+  mood: 'warm' | 'bw' | 'promo';
+  index: number;
+}
+
+const { title, project, format, task, role, mood, index } = Astro.props;
+
+const gradients: Record<string, string> = {
+  warm: 'radial-gradient(120% 100% at 30% 0%, #3a2712 0%, #17120a 55%, #0b0a08 100%)',
+  bw: 'radial-gradient(120% 100% at 70% 0%, #3a3a3a 0%, #171717 55%, #0b0a08 100%)',
+  promo: 'radial-gradient(120% 100% at 30% 100%, #4a140c 0%, #1c0d0a 55%, #0b0a08 100%)',
+};
+---
+
+<article
+  class:list={['group relative aspect-[4/5] overflow-hidden rounded-sm mood-' + mood]}
+  data-reveal
+  style={`--reveal-index:${index}`}
+>
+  <div
+    class="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
+    style={`background:${gradients[mood]}`}
+  >
+  </div>
+  <div
+    class="absolute inset-0 opacity-0 mix-blend-overlay transition-opacity duration-500 group-hover:opacity-100"
+    style={`background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`}
+  >
+  </div>
+
+  <div class="absolute inset-0 flex items-center justify-center">
+    <span class="flex h-14 w-14 items-center justify-center rounded-full border border-paper/30 text-paper/70 opacity-0 transition-all duration-500 group-hover:opacity-100 group-hover:scale-110" aria-hidden="true">
+      <svg width="16" height="18" viewBox="0 0 16 18" fill="currentColor"><path d="M0 0L16 9L0 18V0Z"/></svg>
+    </span>
+  </div>
+
+  <div class="absolute inset-x-0 top-0 flex items-center justify-between p-6">
+    <span class="text-[10px] font-medium uppercase tracking-[0.3em] text-[var(--mood)]">{project}</span>
+    <span class="text-[10px] uppercase tracking-[0.25em] text-paper/40">{format}</span>
+  </div>
+
+  <div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-ink via-ink/70 to-transparent p-6 pt-16">
+    <h3 class="font-display text-2xl text-paper">{title}</h3>
+
+    <div class="mt-3 max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-out group-hover:mt-4 group-hover:max-h-40 group-hover:opacity-100">
+      <p class="text-sm leading-relaxed text-paper/70">{task}</p>
+      <p class="mt-3 text-[10px] uppercase tracking-[0.2em] text-[var(--mood)]">{role}</p>
+    </div>
+  </div>
+</article>

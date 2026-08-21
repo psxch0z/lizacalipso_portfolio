@@ -1,0 +1,38 @@
+---
+import { getCollection } from 'astro:content';
+import CaseCard from './CaseCard.astro';
+
+const allCases = await getCollection('cases');
+const personal = allCases
+  .filter((c) => c.data.group === 'personal')
+  .sort((a, b) => a.data.order - b.data.order);
+---
+
+<section id="personal" class="relative w-full bg-ink px-6 py-28 md:py-36">
+  <div class="mx-auto max-w-6xl">
+    <div class="mb-16 max-w-2xl" data-reveal>
+      <p class="mb-6 text-xs font-medium uppercase tracking-[0.4em] text-warm/80">Creative projects</p>
+      <h2 class="font-display text-[clamp(2rem,4vw,3rem)] font-medium text-paper text-balance">
+        My visual style
+      </h2>
+      <p class="mt-4 text-paper/60">
+        Личные творческие проекты, которые отражают мой визуальный стиль, чувство кадра и
+        подход к созданию визуальных историй.
+      </p>
+    </div>
+
+    <div class="grid gap-6 sm:grid-cols-2" data-reveal-group>
+      {personal.map((c, i) => (
+        <CaseCard
+          title={c.data.title}
+          project={c.data.project}
+          format={c.data.format}
+          task={c.data.task}
+          role={c.data.role}
+          mood={c.data.mood}
+          index={i}
+        />
+      ))}
+    </div>
+  </div>
+</section>
