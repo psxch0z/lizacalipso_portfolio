@@ -99,6 +99,12 @@ const {
       };
 
       document.querySelectorAll<HTMLElement>('[data-full-video]').forEach((card) => {
+        const full = card.querySelector<HTMLVideoElement>('[data-full-video-el]');
+        const pauseIcon = card.querySelector<HTMLElement>('[data-pause-icon]');
+
+        full?.addEventListener('play', () => pauseIcon?.classList.remove('opacity-100'));
+        full?.addEventListener('pause', () => pauseIcon?.classList.add('opacity-100'));
+
         card.addEventListener('click', (e) => {
           const target = e.target as HTMLElement;
           if (target.closest('[data-card-close]')) {
@@ -106,11 +112,19 @@ const {
             if (activeCard === card) activeCard = null;
             return;
           }
-          if (card.dataset.playing === 'true') return;
+          if (card.dataset.playing === 'true') {
+            if (full) full.paused ? full.play().catch(() => {}) : full.pause();
+            return;
+          }
           activate(card);
         });
         card.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' && card.dataset.playing !== 'true') activate(card);
+          if (e.key !== 'Enter') return;
+          if (card.dataset.playing !== 'true') {
+            activate(card);
+          } else if (full) {
+            full.paused ? full.play().catch(() => {}) : full.pause();
+          }
         });
       });
 
