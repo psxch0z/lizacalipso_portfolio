@@ -29,6 +29,28 @@ const {
   </head>
   <body class="antialiased selection:bg-[var(--color-warm)]">
     <slot />
+
+    <div
+      id="video-lightbox"
+      class="fixed inset-0 z-100 hidden items-center justify-center bg-ink/95 p-6 backdrop-blur-sm"
+      data-lightbox
+    >
+      <button
+        type="button"
+        data-lightbox-close
+        class="absolute right-6 top-6 text-xs uppercase tracking-[0.3em] text-paper/60 transition-colors hover:text-warm"
+      >
+        Close
+      </button>
+      <p data-lightbox-title class="absolute left-6 top-6 text-xs uppercase tracking-[0.3em] text-paper/40"></p>
+      <video
+        data-lightbox-video
+        class="max-h-[85vh] max-w-full rounded-sm"
+        controls
+        playsinline
+      ></video>
+    </div>
+
     <script>
       const io = new IntersectionObserver(
         (entries) => {
@@ -48,6 +70,77 @@ const {
           el.style.setProperty('--reveal-index', String(i % 8));
         }
         io.observe(el);
+      });
+
+      // hover preview: play/pause the muted preview video on card hover
+      document.querySelectorAll<HTMLElement>('[data-hover-video]').forEach((card) => {
+        const video = card.querySelector<HTMLVideoElement>('[data-preview-video]');
+        if (!video) return;
+        const src = card.dataset.hoverVideo;
+
+        const play = () => {
+          if (!video.src && src) video.src = src;
+          video.currentTime = 0;
+          video.classList.add('opacity-100');
+          video.play().catch(() => {});
+        };
+        const stop = () => {
+          video.pause();
+          video.classList.remove('opacity-100');
+        };
+
+        card.addEventListener('mouseenter', play);
+        card.addEventListener('mouseleave', stop);
+        card.addEventListener('focus', play);
+        card.addEventListener('blur', stop);
+      });
+
+      // lightbox: open full video on card click / Enter
+      const lightbox = document.querySelector<HTMLElement>('[data-lightbox]');
+      const lightboxVideo = document.querySelector<HTMLVideoElement>('[data-lightbox-video]');
+      const lightboxTitle = document.querySelector<HTMLElement>('[data-lightbox-title]');
+
+      const openLightbox = (src: string, title: string) => {
+        if (!lightbox || !lightboxVideo) return;
+        lightboxVideo.src = src;
+        if (lightboxTitle) lightboxTitle.textContent = title;
+        lightbox.classList.remove('hidden');
+        lightbox.classList.add('flex');
+        lightboxVideo.play().catch(() => {});
+        document.body.style.overflow = 'hidden';
+      };
+
+      const closeLightbox = () => {
+        if (!lightbox || !lightboxVideo) return;
+        lightbox.classList.add('hidden');
+        lightbox.classList.remove('flex');
+        lightboxVideo.pause();
+        lightboxVideo.src = '';
+        document.body.style.overflow = '';
+      };
+
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        const trigger = target.closest<HTMLElement>('[data-open-video]');
+        if (trigger) {
+          openLightbox(trigger.dataset.openVideo ?? '', trigger.dataset.openTitle ?? '');
+          return;
+        }
+        if (target === lightbox || target.closest('[data-lightbox-close]')) {
+          closeLightbox();
+        }
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter') return;
+        const target = e.target as HTMLElement;
+        const trigger = target.closest<HTMLElement>('[data-open-video]');
+        if (trigger) openLightbox(trigger.dataset.openVideo ?? '', trigger.dataset.openTitle ?? '');
+        if (e.key === 'Escape') closeLightbox();
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeLightbox();
       });
     </script>
   </body>

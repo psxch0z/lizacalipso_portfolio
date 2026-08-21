@@ -13,7 +13,7 @@ const cases = defineCollection({
     mood: z.enum(['warm', 'bw', 'promo']),
     group: z.enum(['commercial', 'personal']),
     section: z.string(),
-    videoId: z.string().optional(),
+    hasMedia: z.boolean().default(false),
     order: z.number(),
   }),
 });
